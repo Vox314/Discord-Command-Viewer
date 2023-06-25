@@ -35,5 +35,6 @@ Your Bot Token will **not** be shared with anyone while using this script!
 
 **GUI (Recommended):** Open `gui.py`, make sure `main.py` and `.env` are in the same directory as the GUI cannot function without them.\
 If you leave the `GUILD_ID` field empty and press `Update Command List` button, it will show you the global commands.\
+
 **CLI (Not recommended):** Open `main.py`, make sure you setup `.env` in the same direcotry, as the CLI cannot function without it, if you wish to change the `GUILD_ID` you need to change it between executions of the script.\
 If you set the value `GUILD_ID` to `None` it will show you the global commands.
