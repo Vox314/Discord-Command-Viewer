@@ -49,6 +49,22 @@ def update_command_list():
 
     command_list.config(state=tk.DISABLED)
 
+def toggle_theme():
+    if root.cget('bg') == '#2b2b2b':
+        # Change to light theme
+        root.configure(bg='#f0f0f0')
+        command_list.configure(bg='#ffffff', fg='#000000')
+        GUILD_ID_entry.configure(bg='#ffffff', fg='#000000')
+        update_button.configure(bg='#d9d9d9', fg='#000000')
+        theme_button.configure(bg='#d9d9d9', fg='#000000', text='Dark Theme')
+    else:
+        # Change to dark theme
+        root.configure(bg='#2b2b2b')
+        command_list.configure(bg='#2b2b2b', fg='#f0f0f0')
+        GUILD_ID_entry.configure(bg='#2b2b2b', fg='#f0f0f0')
+        update_button.configure(bg='#2b2b2b', fg='#f0f0f0')
+        theme_button.configure(bg='#2b2b2b', fg='#f0f0f0', text='Light Theme')
+
 # Create a new Tkinter window
 root = tk.Tk()
 root.title(f"Discord Command Viewer {version}")
@@ -81,9 +97,20 @@ command_list.config(state=tk.DISABLED)
 # Create a button to update the command list
 update_button = tk.Button(root, text="Update Command List", command=update_command_list)
 
+# Create a button to toggle the theme
+theme_button = tk.Button(root, text="Dark Theme", command=toggle_theme)
+
+# Default = Dark Theme
+root.configure(bg='#2b2b2b')
+command_list.configure(bg='#2b2b2b', fg='#f0f0f0')
+GUILD_ID_entry.configure(bg='#2b2b2b', fg='#f0f0f0')
+update_button.configure(bg='#2b2b2b', fg='#f0f0f0')
+theme_button.configure(bg='#2b2b2b', fg='#f0f0f0', text='Light Theme')
+
 # Pack the widgets into the window
 GUILD_ID_entry.pack()
 command_list.pack()
 update_button.pack()
+theme_button.pack()
 
 root.mainloop()
