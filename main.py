@@ -21,7 +21,7 @@ version = 0.1
 
 # Replace this value with your bot's token (if no .env file is provided)
 BOT_TOKEN = os.getenv('token') # The bot's token, retrieved from an environment variable named "token"
-GUILD_ID = None # None # The ID of the guild for which to retrieve private commands (if any). Set to None to retrieve global commands.
+GUILD_ID = None # The ID (int!!!) of the guild for which to retrieve private commands (if any). Set to None to retrieve global commands.
 
 def get_bot_user_id():
     """Retrieve the bot's user ID using its token."""
