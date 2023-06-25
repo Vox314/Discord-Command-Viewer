@@ -18,15 +18,19 @@ from main import retrieve_commands, display_commands
 
 def update_command_list():
     # Retrieve the value from the Entry widget
-    try:
-        GUILD_ID = int(GUILD_ID_entry.get())
-    except ValueError:
-        # The value entered by the user is not a valid integer
-        command_list.config(state=tk.NORMAL)
-        command_list.delete("1.0", tk.END)
-        command_list.insert(tk.END, "Error: Please enter a valid integer for GUILD_ID.")
-        command_list.config(state=tk.DISABLED)
-        return
+    GUILD_ID = GUILD_ID_entry.get()
+    if GUILD_ID == "":
+        GUILD_ID = None
+    else:
+        try:
+            GUILD_ID = int(GUILD_ID)
+        except ValueError or TypeError:
+            # The value entered by the user is not a valid integer
+            command_list.config(state=tk.NORMAL)
+            command_list.delete("1.0", tk.END)
+            command_list.insert(tk.END, "Error: Please enter a valid integer for GUILD_ID.")
+            command_list.config(state=tk.DISABLED)
+            return
 
     # Retrieve commands using the retrieve_commands function from main.py
     commands = retrieve_commands(GUILD_ID)
