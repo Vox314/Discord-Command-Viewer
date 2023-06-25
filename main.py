@@ -20,7 +20,7 @@ load_dotenv()
 
 # Replace this value with your bot's token (if no .env file is provided)
 BOT_TOKEN = os.getenv('token') # The bot's token, retrieved from an environment variable named "token"
-GUILD_ID = 1114959767715184730 # None # The ID of the guild for which to retrieve private commands (if any). Set to None to retrieve global commands.
+GUILD_ID = None # None # The ID of the guild for which to retrieve private commands (if any). Set to None to retrieve global commands.
 
 def get_bot_user_id():
     """Retrieve the bot's user ID using its token."""
@@ -46,7 +46,11 @@ def retrieve_commands(guild_id=None):
     Returns a list of commands.
     """
     if guild_id is not None:
-        guilds = f"guilds/{guild_id}/"
+        try:
+            guild_id = int(guild_id)
+            guilds = f"guilds/{guild_id}/"
+        except ValueError or TypeError:
+            return "Error: Please enter a valid integer for GUILD_ID."
     else:
         guilds = ""
 
@@ -94,6 +98,10 @@ def display_commands(commands, return_output=False):
         print(output)
 
 if __name__ == '__main__':
-
     commands = retrieve_commands(GUILD_ID)
-    display_commands(commands) # return_output=False by default
+    if isinstance(commands, str) and commands.startswith("Error:"):
+        # An error occurred, display the error message
+        print(commands)
+    else:
+        # No error occurred, display the commands
+        display_commands(commands) # return_output=False by default
