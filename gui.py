@@ -47,6 +47,8 @@ def update_command_list():
         # No error occurred, display the commands
         command_list.insert(tk.END, display_commands(commands, return_output=True))
 
+    command_list.config(state=tk.DISABLED)
+
 # Create a new Tkinter window
 root = tk.Tk()
 root.title(f"Discord Command Viewer {version}")
