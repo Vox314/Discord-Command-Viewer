@@ -17,6 +17,7 @@ import requests, os
 from dotenv import load_dotenv
 
 load_dotenv()
+version = 0.1
 
 # Replace this value with your bot's token (if no .env file is provided)
 BOT_TOKEN = os.getenv('token') # The bot's token, retrieved from an environment variable named "token"

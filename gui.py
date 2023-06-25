@@ -14,12 +14,13 @@ run main.py for the CLI
 """
 
 import tkinter as tk
-from main import retrieve_commands, display_commands
+from tkinter import ttk
+from main import retrieve_commands, display_commands, version
 
 def update_command_list():
     # Retrieve the value from the Entry widget
     GUILD_ID = GUILD_ID_entry.get()
-    if GUILD_ID == "":
+    if GUILD_ID == "" or GUILD_ID == "GUILD_ID":
         GUILD_ID = None
     else:
         try:
@@ -46,22 +47,41 @@ def update_command_list():
         # No error occurred, display the commands
         command_list.insert(tk.END, display_commands(commands, return_output=True))
 
-    # Make it read / copy only
-    command_list.config(state=tk.DISABLED)
-
+# Create a new Tkinter window
 root = tk.Tk()
-root.title("Discord Command Viewer")
+root.title(f"Discord Command Viewer {version}")
 
 # Create an Entry widget for inputting GUILD_ID
 GUILD_ID_entry = tk.Entry(root)
-GUILD_ID_entry.pack()
+GUILD_ID_entry.insert(0, "GUILD_ID")
+GUILD_ID_entry.configure(foreground="grey")
+
+# Bind the focus event to clear the placeholder text when the Entry widget receives focus
+def on_focus_in(event):
+    if GUILD_ID_entry.get() == "GUILD_ID":
+        GUILD_ID_entry.delete(0, tk.END)
+        GUILD_ID_entry.configure(foreground="black")
+
+GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
+
+# Bind the focus out event to restore the placeholder text when the Entry widget loses focus
+def on_focus_out(event):
+    if GUILD_ID_entry.get() == "":
+        GUILD_ID_entry.insert(0, "GUILD_ID")
+        GUILD_ID_entry.configure(foreground="grey")
+
+GUILD_ID_entry.bind("<FocusOut>", on_focus_out)
 
 # Create a text widget for displaying the command list
 command_list = tk.Text(root)
-command_list.pack()
+command_list.config(state=tk.DISABLED)
 
 # Create a button to update the command list
 update_button = tk.Button(root, text="Update Command List", command=update_command_list)
+
+# Pack the widgets into the window
+GUILD_ID_entry.pack()
+command_list.pack()
 update_button.pack()
 
 root.mainloop()
