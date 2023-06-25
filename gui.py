@@ -68,6 +68,7 @@ def toggle_theme():
 # Create a new Tkinter window
 root = tk.Tk()
 root.title(f"Discord Command Viewer {version}")
+root.resizable(False, False)
 
 # Create an Entry widget for inputting GUILD_ID
 GUILD_ID_entry = tk.Entry(root)
