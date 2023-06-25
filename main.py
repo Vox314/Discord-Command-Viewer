@@ -1,10 +1,16 @@
-# main.py
-
 """
+## DCV (CLI)
+
+Copyright (c) [Vox314](https://github.com/Vox314) \ 
+MIT, see LICENSE for more details.
+
 This script retrieves and displays Discord bot commands.
 
-It can retrieve either global commands or private commands for a specific guild,
+It can retrieve either global commands or private commands for a specific guild, \ 
 depending on whether or not a GUILD_ID is provided.
+
+This is the CLI \ 
+run gui.py for the GUI
 """
 
 import requests, os
@@ -50,19 +56,24 @@ def retrieve_commands(guild_id=None):
         "Authorization": f"Bot {BOT_TOKEN}"
     }
 
-    # Print the API link being used
+    # Print the API link being used (debug)
     #print(f"API link: {api_link}")
 
     response = requests.get(api_link, headers=headers)
 
-    # Print the response received from the API
+    # Print the response received from the API (debug)
     #print(f"API response: {response.text}")
 
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"An error occurred: {response.text}")
-        return []
+    # Error handler
+    status = response.status_code
+    match status:
+        case 200:
+            return response.json()
+        case 403:
+            return "Error: Bot does not have access to the server."
+        case _:
+            print(f"An error occurred: {response.text}")
+            return "Error: An unknown error occurred."
 
 def display_commands(commands, return_output=False):
     """Display a list of Discord bot commands."""
