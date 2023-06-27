@@ -1,7 +1,7 @@
 
 <p align="center">
 
-# Discord Command Viewer [![blurple_slashcommands](https://cdn3.emoji.gg/emojis/6243-blurple-slashcommands.png)](https://emoji.gg/emoji/6243-blurple-slashcommands)
+# Discord Command Viewer <a href="https://emoji.gg/emoji/6243-blurple-slashcommands"><img src="https://cdn3.emoji.gg/emojis/6243-blurple-slashcommands.png" width="64px" height="64px" alt="blurple_slashcommands"></a>
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Vox314/Discord-Command-Viewer?color=blue)](https://github.com/Vox314/Discord-Command-Viewer/releases) <!-- [![Github All Releases](https://img.shields.io/github/downloads/Vox314/Discord-Command-Viewer/total.svg?color=lightgreen)]() -->
 
