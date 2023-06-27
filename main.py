@@ -22,6 +22,7 @@ BOT_TOKEN = os.getenv('TOKEN')
 GUILD_ID = None
 OWNER = 'Vox314'
 REPO = 'Discord-Command-Viewer'
+API_VERSION = 'v10'
 
 class NetworkError(Exception):
     pass
@@ -48,7 +49,7 @@ version = get_latest_release(OWNER, REPO)
 def get_bot_user_id():
     try:
         response = requests.get(
-            'https://discord.com/api/v10/users/@me',
+            f'https://discord.com/api/{API_VERSION}/users/@me',
             headers={'Authorization': f'Bot {BOT_TOKEN}'}
         )
     except requests.exceptions.RequestException:
@@ -74,7 +75,7 @@ def retrieve_commands(guild_id=None):
     if 'CLIENT_ID' not in globals():
         return 'Error: Could not retrieve bot user ID. Please check your internet connection and try again.'
     else:
-        api_link = f"https://discord.com/api/v10/applications/{CLIENT_ID}/{guilds}commands"
+        api_link = f"https://discord.com/api/{API_VERSION}/applications/{CLIENT_ID}/{guilds}commands"
 
     headers = {
         "Authorization": f"Bot {BOT_TOKEN}"
