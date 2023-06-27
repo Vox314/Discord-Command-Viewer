@@ -18,6 +18,11 @@ from customtkinter import CTkButton as Button
 from main import retrieve_commands, display_commands, version
 
 def update_command_list():
+
+    # 1000ms timeout to prevent API spam
+    update_button.configure(state='disabled')
+    root.after(1000, lambda: update_button.configure(state='normal'))
+
     # Retrieve the value from the Entry widget
     GUILD_ID = GUILD_ID_entry.get()
     if GUILD_ID == "" or GUILD_ID == "GUILD_ID":

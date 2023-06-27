@@ -87,7 +87,7 @@ def retrieve_commands(guild_id=None):
         raise NetworkError('Could not connect to the Discord API. Please check your internet connection.')
 
     status = response.status_code
-    print(response.status_code)
+    print(response.status_code) # Uncomment for debugging
     match status:
         case 200:
             return response.json()
