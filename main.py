@@ -13,8 +13,7 @@ This is the CLI \
 run gui.py for the GUI
 """
 
-import argparse
-import requests, os
+import requests, os, argparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -121,8 +120,12 @@ def display_commands(commands, return_output=False):
         print(output)
 
 def run(args):
-    guild_id = args.guild_id
-    commands = retrieve_commands(guild_id)
+    if args.all:
+        commands = retrieve_commands()
+    else:
+        guild_id = args.guild
+        commands = retrieve_commands(guild_id)
+
     if isinstance(commands, str) and commands.startswith("Error:"):
         # An error occurred, display the error message
         print(commands)
@@ -132,6 +135,7 @@ def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Retrieve and display Discord bot commands.')
-    parser.add_argument('--guild-id', type=int, help='ID of the guild for which to retrieve private commands (if any).')
+    parser.add_argument('-g', '--guild', type=int, metavar='<GUILD_ID>', help='shows only the private commands of a specific guild (if any).')
+    parser.add_argument('-a', '--all', action='store_true', help='shows all global / public commands (if any).')
     args = parser.parse_args()
     run(args)
