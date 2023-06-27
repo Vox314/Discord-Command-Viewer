@@ -84,7 +84,7 @@ def on_focus_out(event):
 root = ctk.CTk()
 root.iconbitmap('assets/icon.ico')
 root.title(f"Discord Command Viewer {version}")
-root.geometry("960x540")
+root.geometry("960x540") # Default 960x540
 root.resizable(False, False)
 
 ctk.set_appearance_mode("system")
@@ -99,7 +99,6 @@ command_list = ctk.CTkTextbox(root)
 command_list.configure(state=ctk.DISABLED)
 
 update_button = Button(root, text="Update Command List", command=update_command_list)
-
 theme_button = Button(root, text="Toggle Theme", command=toggle_theme)
 
 # Bind events to widgets
@@ -107,9 +106,9 @@ GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
 GUILD_ID_entry.bind("<FocusOut>", on_focus_out)
 
 # Pack the widgets into the window
-GUILD_ID_entry.pack()
-command_list.pack()
-update_button.pack()
-theme_button.pack()
+GUILD_ID_entry.pack(fill='x', padx=300, pady=10)
+command_list.pack(fill='both', expand=True, padx=20, pady=0)
+update_button.pack(padx=10, pady=10)
+theme_button.pack(padx=10, pady=10)
 
 root.mainloop()

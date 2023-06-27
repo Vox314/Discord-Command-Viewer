@@ -87,11 +87,16 @@ def retrieve_commands(guild_id=None):
         raise NetworkError('Could not connect to the Discord API. Please check your internet connection.')
 
     status = response.status_code
+    print(response.status_code)
     match status:
         case 200:
             return response.json()
         case 403:
             return "Error: Bot does not have access to the server."
+        case 400:
+            data = response.json()
+            if data.get('code') == 50035:
+                return "Error: Please enter a valid snowflake for GUILD_ID"
         case _:
             print(f"An error occurred: {response.text}")
             return "Error: An unknown error occurred."
