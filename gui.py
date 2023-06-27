@@ -82,12 +82,12 @@ def on_focus_out(event):
 
 # Create a new ctkinter window
 root = ctk.CTk()
-root.geometry("500x350")
+root.geometry("960x540")
 root.title(f"Discord Command Viewer {version}")
 root.resizable(False, False)
 
 ctk.set_appearance_mode("system")
-ctk.set_default_color_theme("green")
+ctk.set_default_color_theme("blue")
 
 # Create widgets
 GUILD_ID_entry = ctk.CTkEntry(root)
@@ -108,7 +108,7 @@ GUILD_ID_entry.bind("<FocusOut>", on_focus_out)
 # Pack the widgets into the window
 GUILD_ID_entry.pack()
 command_list.pack()
-update_button.pack()
+update_button.pack(padx=20, ) # left of here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 theme_button.pack()
 
 root.mainloop()
