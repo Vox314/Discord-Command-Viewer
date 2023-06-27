@@ -1,7 +1,7 @@
 
 <p align="center">
 
-# Discord Command Viewer (For the most recent commits only)
+# Discord Command Viewer (Most recent commits only)
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Vox314/Discord-Command-Viewer?color=blue)](https://github.com/Vox314/Discord-Command-Viewer/releases) <!-- [![Github All Releases](https://img.shields.io/github/downloads/Vox314/Discord-Command-Viewer/total.svg?color=lightgreen)]() -->
 
