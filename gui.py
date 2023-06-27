@@ -13,8 +13,8 @@ This is the GUI \
 run main.py for the CLI
 """
 
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
+from customtkinter import CTkButton as Button
 from main import retrieve_commands, display_commands, version
 
 def update_command_list():
@@ -27,86 +27,83 @@ def update_command_list():
             GUILD_ID = int(GUILD_ID)
         except ValueError or TypeError:
             # The value entered by the user is not a valid integer
-            command_list.config(state=tk.NORMAL)
-            command_list.delete("1.0", tk.END)
-            command_list.insert(tk.END, "Error: Please enter a valid integer for GUILD_ID.")
-            command_list.config(state=tk.DISABLED)
+            command_list.configure(state=ctk.NORMAL)
+            command_list.delete("1.0", ctk.END)
+            command_list.insert(ctk.END, "Error: Please enter a valid integer for GUILD_ID.")
+            command_list.configure(state=ctk.DISABLED)
             return
 
     # Retrieve commands using the retrieve_commands function from main.py
     commands = retrieve_commands(GUILD_ID)
 
     # Clear the text widget
-    command_list.config(state=tk.NORMAL)
-    command_list.delete("1.0", tk.END)
+    command_list.configure(state=ctk.NORMAL)
+    command_list.delete("1.0", ctk.END)
 
     if isinstance(commands, str) and commands.startswith("Error:"):
         # An error occurred, display the error message
-        command_list.insert(tk.END, commands)
+        command_list.insert(ctk.END, commands)
     else:
-        # No error occurred, display the commands
-        command_list.insert(tk.END, display_commands(commands, return_output=True))
+        # No error occurred, display the commands ctk
+        command_list.insert(ctk.END, display_commands(commands, return_output=True))
 
-    command_list.config(state=tk.DISABLED)
+    command_list.configure(state=ctk.DISABLED)
 
 def toggle_theme():
-    if root.cget('bg') == '#2b2b2b':
-        # Change to light theme
-        root.configure(bg='#f0f0f0')
-        command_list.configure(bg='#ffffff', fg='#000000')
-        GUILD_ID_entry.configure(bg='#ffffff', fg='#000000')
-        update_button.configure(bg='#d9d9d9', fg='#000000')
-        theme_button.configure(bg='#d9d9d9', fg='#000000', text='Dark Theme')
+    current_mode = ctk.get_appearance_mode()
+    if current_mode == 'Dark':
+        ctk.set_appearance_mode('Light')
+        theme_button.configure(text='Dark Theme')
+        if GUILD_ID_entry.get() == "GUILD_ID":
+            GUILD_ID_entry.configure(text_color="grey")
+        else:
+            GUILD_ID_entry.configure(text_color="black")
     else:
-        # Change to dark theme
-        root.configure(bg='#2b2b2b')
-        command_list.configure(bg='#2b2b2b', fg='#f0f0f0')
-        GUILD_ID_entry.configure(bg='#2b2b2b', fg='#f0f0f0')
-        update_button.configure(bg='#2b2b2b', fg='#f0f0f0')
-        theme_button.configure(bg='#2b2b2b', fg='#f0f0f0', text='Light Theme')
+        ctk.set_appearance_mode('Dark')
+        theme_button.configure(text='Light Theme')
+        if GUILD_ID_entry.get() == "GUILD_ID":
+            GUILD_ID_entry.configure(text_color="grey")
+        else:
+            GUILD_ID_entry.configure(text_color="white")
 
-# Create a new Tkinter window
-root = tk.Tk()
-root.title(f"Discord Command Viewer {version}")
-root.resizable(False, False)
-
-# Create an Entry widget for inputting GUILD_ID
-GUILD_ID_entry = tk.Entry(root)
-GUILD_ID_entry.insert(0, "GUILD_ID")
-GUILD_ID_entry.configure(foreground="grey")
-
-# Bind the focus event to clear the placeholder text when the Entry widget receives focus
 def on_focus_in(event):
     if GUILD_ID_entry.get() == "GUILD_ID":
-        GUILD_ID_entry.delete(0, tk.END)
-        GUILD_ID_entry.configure(foreground="black")
+        GUILD_ID_entry.delete(0, ctk.END)
+    current_mode = ctk.get_appearance_mode()
+    if current_mode == 'Dark':
+        GUILD_ID_entry.configure(text_color="white")
+    elif current_mode == 'Light':
+        GUILD_ID_entry.configure(text_color="black")
 
-GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
-
-# Bind the focus out event to restore the placeholder text when the Entry widget loses focus
 def on_focus_out(event):
     if GUILD_ID_entry.get() == "":
         GUILD_ID_entry.insert(0, "GUILD_ID")
-        GUILD_ID_entry.configure(foreground="grey")
+        GUILD_ID_entry.configure(text_color="grey")
 
+# Create a new ctkinter window
+root = ctk.CTk()
+root.geometry("500x350")
+root.title(f"Discord Command Viewer {version}")
+root.resizable(False, False)
+
+ctk.set_appearance_mode("system")
+ctk.set_default_color_theme("green")
+
+# Create widgets
+GUILD_ID_entry = ctk.CTkEntry(root)
+GUILD_ID_entry.insert(0, "GUILD_ID")
+GUILD_ID_entry.configure(text_color="grey")
+
+command_list = ctk.CTkTextbox(root)
+command_list.configure(state=ctk.DISABLED)
+
+update_button = Button(root, text="Update Command List", command=update_command_list)
+
+theme_button = Button(root, text="Toggle Theme", command=toggle_theme)
+
+# Bind events to widgets
+GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
 GUILD_ID_entry.bind("<FocusOut>", on_focus_out)
-
-# Create a text widget for displaying the command list
-command_list = tk.Text(root)
-command_list.config(state=tk.DISABLED)
-
-# Create a button to update the command list
-update_button = tk.Button(root, text="Update Command List", command=update_command_list)
-
-# Create a button to toggle the theme
-theme_button = tk.Button(root, text="Dark Theme", command=toggle_theme)
-
-# Default = Dark Theme
-root.configure(bg='#2b2b2b')
-command_list.configure(bg='#2b2b2b', fg='#f0f0f0')
-GUILD_ID_entry.configure(bg='#2b2b2b', fg='#f0f0f0')
-update_button.configure(bg='#2b2b2b', fg='#f0f0f0')
-theme_button.configure(bg='#2b2b2b', fg='#f0f0f0', text='Light Theme')
 
 # Pack the widgets into the window
 GUILD_ID_entry.pack()

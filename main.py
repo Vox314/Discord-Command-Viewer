@@ -13,20 +13,35 @@ This is the CLI \
 run gui.py for the GUI
 """
 
+import argparse
 import requests, os
 from dotenv import load_dotenv
 
 load_dotenv()
-version = 0.1
 
-# Replace this value with your bot's token (if no .env file is provided)
-BOT_TOKEN = os.getenv('TOKEN') # The bot's token, retrieved from an environment variable named "token"
-GUILD_ID = None # The ID (int!!!) of the guild for which to retrieve private commands (if any). Set to None to retrieve global commands.
+BOT_TOKEN = os.getenv('TOKEN')
+GUILD_ID = None
+OWNER = 'Vox314'
+REPO = 'Discord-Command-Viewer'
+
+def get_latest_release(owner, repo):
+    headers = {
+        'Accept': 'application/vnd.github+json'
+    }
+    url = f'https://api.github.com/repos/{owner}/{repo}/releases/latest'
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()['tag_name']
+    else:
+        print(f'An error occurred: {response.text}')
+        return None
+
+
+version = get_latest_release(OWNER, REPO)
 
 def get_bot_user_id():
-    """Retrieve the bot's user ID using its token."""
     response = requests.get(
-        'https://discord.com/api/v9/users/@me',
+        'https://discord.com/api/v10/users/@me',
         headers={'Authorization': f'Bot {BOT_TOKEN}'}
     )
 
@@ -39,13 +54,6 @@ def get_bot_user_id():
 CLIENT_ID = get_bot_user_id()
 
 def retrieve_commands(guild_id=None):
-    """Retrieve Discord bot commands.
-
-    If a guild_id is provided, retrieve private commands for that guild.
-    Otherwise, retrieve global commands.
-
-    Returns a list of commands.
-    """
     if guild_id is not None:
         try:
             guild_id = int(guild_id)
@@ -55,21 +63,14 @@ def retrieve_commands(guild_id=None):
     else:
         guilds = ""
 
-    api_link = f"https://discord.com/api/v9/applications/{CLIENT_ID}/{guilds}commands"
+    api_link = f"https://discord.com/api/v10/applications/{CLIENT_ID}/{guilds}commands"
 
     headers = {
         "Authorization": f"Bot {BOT_TOKEN}"
     }
 
-    # Print the API link being used (debug)
-    #print(f"API link: {api_link}")
-
     response = requests.get(api_link, headers=headers)
 
-    # Print the response received from the API (debug)
-    #print(f"API response: {response.text}")
-
-    # Error handler
     status = response.status_code
     match status:
         case 200:
@@ -81,7 +82,6 @@ def retrieve_commands(guild_id=None):
             return "Error: An unknown error occurred."
 
 def display_commands(commands, return_output=False):
-    """Display a list of Discord bot commands."""
     output = ""
     if not commands:
         output += "No commands found.\n"
@@ -98,11 +98,18 @@ def display_commands(commands, return_output=False):
     else:
         print(output)
 
-if __name__ == '__main__':
-    commands = retrieve_commands(GUILD_ID)
+def run(args):
+    guild_id = args.guild_id
+    commands = retrieve_commands(guild_id)
     if isinstance(commands, str) and commands.startswith("Error:"):
         # An error occurred, display the error message
         print(commands)
     else:
         # No error occurred, display the commands
         display_commands(commands) # return_output=False by default
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Retrieve and display Discord bot commands.')
+    parser.add_argument('--guild-id', type=int, help='ID of the guild for which to retrieve private commands (if any).')
+    args = parser.parse_args()
+    run(args)
