@@ -24,34 +24,42 @@ GUILD_ID = None
 OWNER = 'Vox314'
 REPO = 'Discord-Command-Viewer'
 
+class NetworkError(Exception):
+    pass
+
 def get_latest_release(owner, repo):
     headers = {
         'Accept': 'application/vnd.github+json'
     }
     url = f'https://api.github.com/repos/{owner}/{repo}/releases/latest'
-    response = requests.get(url, headers=headers)
+    try:
+        response = requests.get(url, headers=headers)
+    except requests.exceptions.RequestException:
+        print('Warning: Could not connect to the GitHub API. Using default version: vChip.')
+        return 'vChip'
+
     if response.status_code == 200:
         return response.json()['tag_name']
     else:
         print(f'An error occurred: {response.text}')
-        return None
-
+        return 'vChip'
 
 version = get_latest_release(OWNER, REPO)
 
 def get_bot_user_id():
-    response = requests.get(
-        'https://discord.com/api/v10/users/@me',
-        headers={'Authorization': f'Bot {BOT_TOKEN}'}
-    )
+    try:
+        response = requests.get(
+            'https://discord.com/api/v10/users/@me',
+            headers={'Authorization': f'Bot {BOT_TOKEN}'}
+        )
+    except requests.exceptions.RequestException:
+        raise NetworkError('Could not connect to the Discord API. Please check your internet connection.')
 
     if response.status_code == 200:
         return response.json()['id']
     else:
         print(f"An error occurred: {response.text}")
         return None
-
-CLIENT_ID = get_bot_user_id()
 
 def retrieve_commands(guild_id=None):
     if guild_id is not None:
@@ -62,14 +70,21 @@ def retrieve_commands(guild_id=None):
             return "Error: Please enter a valid integer for GUILD_ID."
     else:
         guilds = ""
-
-    api_link = f"https://discord.com/api/v10/applications/{CLIENT_ID}/{guilds}commands"
+    
+    # Error for GUI text widget
+    if 'CLIENT_ID' not in globals():
+        return 'Error: Could not retrieve bot user ID. Please check your internet connection and try again.'
+    else:
+        api_link = f"https://discord.com/api/v10/applications/{CLIENT_ID}/{guilds}commands"
 
     headers = {
         "Authorization": f"Bot {BOT_TOKEN}"
     }
 
-    response = requests.get(api_link, headers=headers)
+    try:
+        response = requests.get(api_link, headers=headers)
+    except requests.exceptions.RequestException:
+        raise NetworkError('Could not connect to the Discord API. Please check your internet connection.')
 
     status = response.status_code
     match status:
@@ -80,6 +95,13 @@ def retrieve_commands(guild_id=None):
         case _:
             print(f"An error occurred: {response.text}")
             return "Error: An unknown error occurred."
+
+try:
+    CLIENT_ID = get_bot_user_id()
+    commands = retrieve_commands(GUILD_ID)
+except NetworkError as e:
+    print('Error: Could not retrieve bot user ID. Please check your internet connection and try again.')
+    print("Error:", e)
 
 def display_commands(commands, return_output=False):
     output = ""
