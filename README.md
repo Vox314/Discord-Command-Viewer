@@ -2,7 +2,7 @@
 
 # <img src="https://cdn3.emoji.gg/emojis/6243-blurple-slashcommands.png" width="30px" height="30px" alt="blurple_slashcommands"> Discord Command Viewer
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Vox314/Discord-Command-Viewer?color=blue)](https://github.com/Vox314/Discord-Command-Viewer/releases) [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) [![Discord API](https://img.shields.io/badge/Discord%20API-v10-blue.svg)](https://discord.com/developers/docs/intro)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Vox314/Discord-Command-Viewer?color=blue)](https://github.com/Vox314/Discord-Command-Viewer/releases) [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/) [![Discord API](https://img.shields.io/badge/Discord%20API-v10-blue.svg)](https://discord.com/developers/docs/change-log)
 
  <!-- [![Github All Releases](https://img.shields.io/github/downloads/Vox314/Discord-Command-Viewer/total.svg?color=lightgreen)]() -->
 
