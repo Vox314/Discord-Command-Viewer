@@ -32,7 +32,7 @@ Your Bot Token will **not** be shared with any third party while using this scri
 
 ## Running:
 
-### GUI (Recommended)\
+### GUI (Recommended)
 - **Windows:**
 Run `gui.py` using:
 
@@ -49,7 +49,7 @@ python gui.py
 Make sure `main.py` and `.env` are in the same directory as the GUI will not function without them.
 If you leave the `GUILD_ID` field empty and press the `Update Command List` button, it will show you the global commands of your Discord Bot.
 
-### CLI:\
+### CLI:
 Run `main.py`, using (furter information in terminal): 
 
 ```
