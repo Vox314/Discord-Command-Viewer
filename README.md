@@ -33,14 +33,27 @@ Your Bot Token will **not** be shared with any third party while using this scri
 ## Running:
 
 **GUI (Recommended)**\
-Run `gui.py`, make sure `main.py` and `.env` are in the same directory as the GUI will not function without them.
+- On Windows:
+Run `gui.py` using:
+
+```
+pythonw gui.py
+```
+- On Mac / Linux:
+Run `gui.py` using:
+
+```
+python gui.py
+```
+
+Make sure `main.py` and `.env` are in the same directory as the GUI will not function without them.
 If you leave the `GUILD_ID` field empty and press the `Update Command List` button, it will show you the global commands of your Discord Bot.
 
 **CLI:**\
 Run `main.py`, using (furter information in terminal): 
 
 ```
-python3 main.py --h
+python main.py --h
 ```
 
 Make sure `main.py` and `.env` are in the same directory as the CLI will not function without them.
