@@ -96,15 +96,18 @@ ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("blue")
 
 # Create widgets
-GUILD_ID_entry = ctk.CTkEntry(root)
+GUILD_ID_entry = ctk.CTkEntry(root, justify="center")
 GUILD_ID_entry.insert(0, "GUILD_ID")
 GUILD_ID_entry.configure(text_color="grey")
 
 command_list = ctk.CTkTextbox(root)
 command_list.configure(state=ctk.DISABLED)
 
-update_button = Button(root, text="Update Command List", command=update_command_list)
-theme_button = Button(root, text="Toggle Theme", command=toggle_theme)
+# Create fram for buttons
+button_frame = ctk.CTkFrame(root)
+
+update_button = Button(button_frame, text="Update Command List", command=update_command_list)
+theme_button = Button(button_frame, text="Toggle Theme", command=toggle_theme)
 
 # Bind events to widgets
 GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
@@ -113,7 +116,8 @@ GUILD_ID_entry.bind("<FocusOut>", on_focus_out)
 # Pack the widgets into the window
 GUILD_ID_entry.pack(fill='x', padx=300, pady=10)
 command_list.pack(fill='both', expand=True, padx=20, pady=0)
-update_button.pack(padx=10, pady=10)
-theme_button.pack(padx=10, pady=10)
+update_button.pack(side='left', padx=10, pady=10)
+theme_button.pack(side='left', padx=10, pady=10)
+button_frame.pack(anchor="center")
 
 root.mainloop()
