@@ -8,7 +8,7 @@
 
 **CLI** & **GUI** to view global or private commands from your Discord bot.
 
-![App Screenshot](https://media.discordapp.net/attachments/979744281851990086/1123419088467804242/image.png?width=734&height=440)
+![App Screenshot](https://media.discordapp.net/attachments/979744281851990086/1123419088467804242/image.png?width=1468&height=880)
 
 </div>
 
