@@ -87,7 +87,7 @@ def on_focus_out(event):
 
 # Create a new ctkinter window
 root = ctk.CTk()
-root.iconbitmap('assets/icon.ico')
+root.iconbitmap('./assets/icon.ico')
 root.title(f"Discord Command Viewer {version}")
 root.geometry("960x540") # Default 960x540
 root.resizable(False, False)
