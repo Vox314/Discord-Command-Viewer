@@ -108,7 +108,7 @@ except NetworkError as e:
     print('Error: Could not retrieve bot user ID. Please check your internet connection and try again.')
     print("Error:", e)
 
-def display_commands(commands, return_output=False):
+def display_commands(commands, args=None, return_output=False):
     output = ""
     if not commands:
         output += "No commands found.\n"
@@ -119,13 +119,49 @@ def display_commands(commands, return_output=False):
             output += 'Global commands:\n'
 
         for command in commands:
-            output += f"{command['name']}: {command['id']}\n"
+            # Always display the command name
+            output += f"Command name: {command['name']}\n"
+
+            if args is not None and (args.description or args.options or args.id):
+                if args.description:
+                    output += f"Command description: {command['description']}\n"
+                if args.options:
+                    if 'options' in command:
+                        output += "Command Options:\n"
+                        for option in command['options']:
+                            output += f"\tName: {option['name']}\n"
+                            output += f"\tType: {option['type']}\n"
+                            output += f"\tDescription: {option['description']}\n"
+                    else:
+                        output += "No options found.\n"
+                if args.id:
+                    output += f"Command ID: {command['id']}\n"
+            else:
+                output += f"Command description: {command['description']}\n"
+                if 'options' in command:
+                    output += "Command Options:\n"
+                    for option in command['options']:
+                        output += f"\tName: {option['name']}\n"
+                        output += f"\tType: {option['type']}\n"
+                        output += f"\tDescription: {option['description']}\n"
+                else:
+                    output += "No options found.\n"
+
+                output += f"Command ID: {command['id']}\n"
+
+            # Add a newline character after each command
+            output += "\n"
+
     if return_output:
         return output
     else:
         print(output)
 
 def run(args):
+    if args.all and args.guild:
+        print("Error: Invalid use of args, only -a or -g can be used at a time.")
+        return
+
     if args.all:
         commands = retrieve_commands()
     else:
@@ -137,11 +173,17 @@ def run(args):
         print(commands)
     else:
         # No error occurred, display the commands
-        display_commands(commands) # return_output=False by default
+        display_commands(commands, args) # return_output=False by default (this is to notice if it's for the GUI or CLI)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Retrieve and display Discord bot commands.')
+    parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawTextHelpFormatter,
+    description=f'Discord Command Viewer {version}\nRetrieve and display Discord bot commands.'
+    )
+    parser.add_argument('-a', '--all', action='store_true', help='shows all global / public commands (if any) (on by default unless specifying a GUILD_ID).')
     parser.add_argument('-g', '--guild', type=int, metavar='<GUILD_ID>', help='shows only the private commands of a specific guild (if any).')
-    parser.add_argument('-a', '--all', action='store_true', help='shows all global / public commands (if any).')
+    parser.add_argument('-d', '--description', action='store_true', help='shows only command descriptions.')
+    parser.add_argument('-o', '--options', action='store_true', help='shows only command options.')
+    parser.add_argument('-i', '--id', action='store_true', help='shows only command IDs.')
     args = parser.parse_args()
     run(args)
