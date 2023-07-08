@@ -52,7 +52,7 @@ Make sure `main.py` and `.env` are in the same directory as the GUI will not fun
 If you leave the `GUILD_ID` field empty and press the `Update Command List` button, it will show you the global commands of your Discord Bot.
 
 ### CLI:
-Run `main.py`, using (furter information in terminal): 
+Run `main.py`, using (further information in terminal): 
 
 ```
 python main.py --h
