@@ -41,7 +41,7 @@ def get_latest_release(owner, repo):
     if response.status_code == 200:
         return response.json()['tag_name']
     else:
-        print(f'An error occurred: {response.text}')
+        print(f'A GitHub API error occurred: {response.text}')
         return 'vChip'
 
 version = get_latest_release(OWNER, REPO)
@@ -58,7 +58,7 @@ def get_bot_user_id():
     if response.status_code == 200:
         return response.json()['id']
     else:
-        print(f"An error occurred: {response.text}")
+        print(f"A Discord API error occurred: {response.text}")
         return None
 
 def retrieve_commands(guild_id=None):
@@ -91,12 +91,16 @@ def retrieve_commands(guild_id=None):
     match status:
         case 200:
             return response.json()
-        case 403:
-            return "Error: Bot does not have access to the server."
         case 400:
             data = response.json()
             if data.get('code') == 50035:
                 return "Error: Please enter a valid snowflake for GUILD_ID"
+        case 401:
+            data = response.json()
+            if "message" in data and data["message"] == "401: Unauthorized":
+                return "Error: The request lacks valid authentication credentials."
+        case 403:
+            return "Error: Bot does not have access to the server."
         case _:
             print(f"An error occurred: {response.text}")
             return "Error: An unknown error occurred."
