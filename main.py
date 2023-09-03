@@ -24,6 +24,8 @@ OWNER = 'Vox314'
 REPO = 'Discord-Command-Viewer'
 API_VERSION = 'v10'
 
+version = 'v0.2.2'
+
 class NetworkError(Exception):
     pass
 
@@ -44,7 +46,7 @@ def get_latest_release(owner, repo):
         print(f'A GitHub API error occurred: {response.text}')
         return 'vChip'
 
-version = get_latest_release(OWNER, REPO)
+new_version = get_latest_release(OWNER, REPO)
 
 def get_bot_user_id():
     try:
