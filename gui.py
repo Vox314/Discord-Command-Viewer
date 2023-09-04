@@ -13,10 +13,13 @@ This is the GUI \
 run main.py for the CLI
 """
 
-import customtkinter as ctk, os
-from customtkinter import CTkButton as Button
-from customtkinter import filedialog
-from main import retrieve_commands, display_commands, version
+import customtkinter as ctk, os, subprocess, sys
+from customtkinter import CTkButton as Button, filedialog
+from tkinter import messagebox
+from main import retrieve_commands, display_commands, version, latest_version, OWNER, REPO
+
+# This enables or disabled Developer mode. 
+DEV_MODE = 0 # 0 = Disabled | 1 = Enabled 
 
 def update_command_list():
 
@@ -89,25 +92,14 @@ def on_focus_out(event):
 def export_text():
     default_file_name = "DCV-Export"
     downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
-    file_path = filedialog.asksaveasfilename(initialdir=downloads_folder, initialfile=default_file_name, defaultextension=".txt")
+    filetypes = [("Text Files", "*.txt")]
+    file_path = filedialog.asksaveasfilename(
+        initialdir=downloads_folder, initialfile=default_file_name, defaultextension=".txt", filetypes=filetypes, title=f"Discord Command Viewer {version} - Exporter"
+        )
     if file_path:
         with open(file_path, 'w', encoding="utf-8") as file:
             text = command_list.get("1.0", "end-1c")
             file.write(text)
-
-def open_env_editor():
-    env_window = ctk.CTkToplevel(root)
-    env_window.title(".env editor")
-    env_text = ctk.CTkTextbox(env_window)
-    env_text.pack()
-    with open(".env", "r", encoding="utf-8") as file:
-        env_text.insert("1.0", file.read())
-    def save_env():
-        with open(".env", "w", encoding="utf-8") as file:
-            file.write(env_text.get("1.0", "end-1c"))
-        env_window.destroy()
-    save_button = ctk.CTkButton(env_window, text="Save", command=save_env)
-    save_button.pack()
 
 # Create a new ctkinter window
 root = ctk.CTk()
@@ -146,4 +138,36 @@ theme_button.pack(side='left', padx=10, pady=10)
 export_button.pack(side='left', padx=10, pady=10)
 button_frame.pack(anchor="center")
 
-root.mainloop()
+RESTART_FLAG = 'MY_SCRIPT_RESTART_FLAG'
+
+if __name__ == "__main__":
+    
+    if os.environ.get(RESTART_FLAG):
+        # The script was restarted after an update
+        del os.environ[RESTART_FLAG]
+        messagebox.showinfo('Update Successful!', f'The script has been updated to version {version}.')
+    
+    if latest_version == version or latest_version == 'vChip' or DEV_MODE == 1:
+        new_version = ''
+    else:
+        if DEV_MODE == 0:
+
+            new_version = latest_version
+            root.update()
+
+            if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
+                try:
+                    # Replace 'username' and 'reponame' with the appropriate values for the GitHub repository
+                    subprocess.check_call(['git', 'clone', f'https://github.com/{OWNER}/{REPO}.git'])
+                    print("Repository downloaded successfully")
+                    
+                    # Set the restart flag and restart the script
+                    os.environ[RESTART_FLAG] = '1'
+                    os.execv(sys.executable, ['python'] + sys.argv)
+                except subprocess.CalledProcessError:
+                    print("An error occurred while downloading the repository")
+
+        else:
+            print(f"DEV_MODE was set to {DEV_MODE}, please use 0 or 1!")
+
+    root.mainloop()

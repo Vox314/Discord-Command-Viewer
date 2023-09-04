@@ -48,7 +48,7 @@ def get_latest_release(owner, repo):
 
 latest_version = get_latest_release(OWNER, REPO)
 
-if latest_version == version or latest_version == 'vUnknown':
+if latest_version == version or latest_version == 'vChip':
     new_version = ''
 else:
     new_version = f'\n\033[32m{latest_version} is now available!\033[0m\n\n'
