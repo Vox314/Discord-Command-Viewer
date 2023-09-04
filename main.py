@@ -46,7 +46,12 @@ def get_latest_release(owner, repo):
         print(f'A GitHub API error occurred: {response.text}')
         return 'vChip'
 
-new_version = get_latest_release(OWNER, REPO)
+latest_version = get_latest_release(OWNER, REPO)
+
+if latest_version == version or latest_version == 'vUnknown':
+    new_version = ''
+else:
+    new_version = f'\n\033[32m{latest_version} is now available!\033[0m\n\n'
 
 def get_bot_user_id():
     try:
@@ -102,7 +107,7 @@ def retrieve_commands(guild_id=None):
             if "message" in data and data["message"] == "401: Unauthorized":
                 return "Error: The request lacks valid authentication credentials."
         case 403:
-            return "Error: Bot does not have access to the server."
+            return "Error: Bot does not have access to this server."
         case _:
             print(f"An error occurred: {response.text}")
             return "Error: An unknown error occurred."
@@ -184,7 +189,7 @@ def run(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
     formatter_class=argparse.RawTextHelpFormatter,
-    description=f'Discord Command Viewer {version}\nRetrieve and display Discord bot commands.'
+    description=f'{new_version}Discord Command Viewer {version}\nRetrieve and display Discord bot commands.'
     )
     parser.add_argument('-a', '--all', action='store_true', help='shows all global / public commands (if any) (on by default unless specifying a GUILD_ID).')
     parser.add_argument('-g', '--guild', type=int, metavar='<GUILD_ID>', help='shows only the private commands of a specific guild (if any).')

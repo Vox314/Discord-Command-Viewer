@@ -13,8 +13,9 @@ This is the GUI \
 run main.py for the CLI
 """
 
-import customtkinter as ctk
+import customtkinter as ctk, os
 from customtkinter import CTkButton as Button
+from customtkinter import filedialog
 from main import retrieve_commands, display_commands, version
 
 def update_command_list():
@@ -85,6 +86,29 @@ def on_focus_out(event):
         GUILD_ID_entry.insert(0, "GUILD_ID")
         GUILD_ID_entry.configure(text_color="grey")
 
+def export_text():
+    default_file_name = "DCV-Export"
+    downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+    file_path = filedialog.asksaveasfilename(initialdir=downloads_folder, initialfile=default_file_name, defaultextension=".txt")
+    if file_path:
+        with open(file_path, 'w', encoding="utf-8") as file:
+            text = command_list.get("1.0", "end-1c")
+            file.write(text)
+
+def open_env_editor():
+    env_window = ctk.CTkToplevel(root)
+    env_window.title(".env editor")
+    env_text = ctk.CTkTextbox(env_window)
+    env_text.pack()
+    with open(".env", "r", encoding="utf-8") as file:
+        env_text.insert("1.0", file.read())
+    def save_env():
+        with open(".env", "w", encoding="utf-8") as file:
+            file.write(env_text.get("1.0", "end-1c"))
+        env_window.destroy()
+    save_button = ctk.CTkButton(env_window, text="Save", command=save_env)
+    save_button.pack()
+
 # Create a new ctkinter window
 root = ctk.CTk()
 root.iconbitmap('./assets/icon.ico')
@@ -103,11 +127,12 @@ GUILD_ID_entry.configure(text_color="grey")
 command_list = ctk.CTkTextbox(root)
 command_list.configure(state=ctk.DISABLED)
 
-# Create fram for buttons
+# Create frame for buttons
 button_frame = ctk.CTkFrame(root)
 
 update_button = Button(button_frame, text="Update Command List", command=update_command_list)
 theme_button = Button(button_frame, text="Toggle Theme", command=toggle_theme)
+export_button = Button(button_frame, text="Export", command=export_text)
 
 # Bind events to widgets
 GUILD_ID_entry.bind("<FocusIn>", on_focus_in)
@@ -118,6 +143,7 @@ GUILD_ID_entry.pack(fill='x', padx=300, pady=10)
 command_list.pack(fill='both', expand=True, padx=20, pady=0)
 update_button.pack(side='left', padx=10, pady=10)
 theme_button.pack(side='left', padx=10, pady=10)
+export_button.pack(side='left', padx=10, pady=10)
 button_frame.pack(anchor="center")
 
 root.mainloop()
