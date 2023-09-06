@@ -157,19 +157,20 @@ if __name__ == "__main__":
 
             if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
                 try:
-                    # Replace 'username' and 'reponame' with the appropriate values for the GitHub repository
                     # Fetch the changes from the remote repository
                     subprocess.check_call(['git', 'fetch', f'https://github.com/{OWNER}/{REPO}.git', f'tags/{new_version}'])
 
-                    # Merge the changes into your local repository
+                    # Merge the changes into the local repository
                     subprocess.check_call(['git', 'merge', f'FETCH_HEAD'])
-                    print("Repository downloaded successfully")
+                    success = 'Updated successfully!'
                     
                     # Set the restart flag and restart the script
                     os.environ[RESTART_FLAG] = '1'
                     os.execv(sys.executable, ['python'] + sys.argv)
-                except subprocess.CalledProcessError:
-                    print("An error occurred while downloading the repository")
+                except subprocess.CalledProcessError as e:
+                    success = f'Failed to update : {e}'
+                
+                print(success)
 
         else:
             print(f"DEV_MODE was set to {DEV_MODE}, please use 0 or 1!")
