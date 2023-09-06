@@ -138,7 +138,7 @@ theme_button.pack(side='left', padx=10, pady=10)
 export_button.pack(side='left', padx=10, pady=10)
 button_frame.pack(anchor="center")
 
-RESTART_FLAG = 'MY_SCRIPT_RESTART_FLAG'
+RESTART_FLAG = 'SCRIPT_RESTART_FLAG'
 
 if __name__ == "__main__":
     
