@@ -18,7 +18,7 @@ from customtkinter import CTkButton as Button, filedialog
 from tkinter import messagebox
 from main import retrieve_commands, display_commands, version, latest_version, OWNER, REPO
 
-# This enables or disabled Developer mode. 
+# This enables or disabled Developer mode.
 DEV_MODE = 0 # 0 = Disabled | 1 = Enabled 
 
 def update_command_list():
@@ -158,7 +158,7 @@ if __name__ == "__main__":
             if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
                 try:
                     # Replace 'username' and 'reponame' with the appropriate values for the GitHub repository
-                    subprocess.check_call(['git', 'clone', f'https://github.com/{OWNER}/{REPO}.git']) # FIX THIS SHIT NEED TO CLONE VERSIONS NOT REPOSITORY
+                    subprocess.check_call(['git', 'clone', '--branch', latest_version, f'https://github.com/{OWNER}/{REPO}.git']) # FIX THIS SHIT NEED TO CLONE VERSIONS NOT REPOSITORY
                     print("Repository downloaded successfully")
                     
                     # Set the restart flag and restart the script
