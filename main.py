@@ -13,6 +13,8 @@ This is the CLI \
 run gui.py for the GUI
 """
 
+# Added this coment here to check if the release updating actually works.
+
 import requests, os, argparse
 from dotenv import load_dotenv
 
