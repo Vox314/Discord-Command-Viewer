@@ -13,8 +13,6 @@ This is the CLI \
 run gui.py for the GUI
 """
 
-# Added this coment here to check if the release updating actually works.
-
 import requests, os, argparse
 from dotenv import load_dotenv
 
@@ -26,7 +24,7 @@ OWNER = 'Vox314'
 REPO = 'Discord-Command-Viewer'
 API_VERSION = 'v10'
 
-version = 'v0.2.3'
+version = 'v0.2.2'
 
 class NetworkError(Exception):
     pass
