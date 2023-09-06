@@ -158,7 +158,11 @@ if __name__ == "__main__":
             if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
                 try:
                     # Replace 'username' and 'reponame' with the appropriate values for the GitHub repository
-                    subprocess.check_call(['git', 'clone', '--branch', latest_version, f'https://github.com/{OWNER}/{REPO}.git']) # FIX THIS SHIT NEED TO CLONE VERSIONS NOT REPOSITORY
+                    # Fetch the changes from the remote repository
+                    subprocess.check_call(['git', 'fetch', f'https://github.com/{OWNER}/{REPO}.git', f'tags/{new_version}'])
+
+                    # Merge the changes into your local repository
+                    subprocess.check_call(['git', 'merge', f'FETCH_HEAD'])
                     print("Repository downloaded successfully")
                     
                     # Set the restart flag and restart the script
