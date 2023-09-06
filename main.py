@@ -26,7 +26,7 @@ OWNER = 'Vox314'
 REPO = 'Discord-Command-Viewer'
 API_VERSION = 'v10'
 
-version = 'v0.2.2'
+version = 'v0.2.3'
 
 class NetworkError(Exception):
     pass
