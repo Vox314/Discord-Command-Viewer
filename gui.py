@@ -138,12 +138,14 @@ theme_button.pack(side='left', padx=10, pady=10)
 export_button.pack(side='left', padx=10, pady=10)
 button_frame.pack(anchor="center")
 
+RESTART_FLAG = 'SCRIPT_RESTART_FLAG'
+
 if __name__ == "__main__":
     
-    if len(sys.argv) > 1:
+    if os.environ.get(RESTART_FLAG):
         # The script was restarted after an update
-        new_version = sys.argv[1]
-        messagebox.showinfo('Update Successful!', f'The script has been updated to version {new_version}.')
+        del os.environ[RESTART_FLAG]
+        messagebox.showinfo('Update Successful!', f'The script has been updated to version {version}.')
     
     if latest_version == version or latest_version == 'vChip' or DEV_MODE == 1:
         new_version = ''
@@ -153,31 +155,22 @@ if __name__ == "__main__":
             new_version = latest_version
             root.update()
 
-            # Fetch the changes from the remote repository
-            fetch_output = subprocess.check_output(['git', 'fetch', f'https://github.com/{OWNER}/{REPO}.git', f'tags/{new_version}'])
+            if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
+                try:
+                    # Fetch the changes from the remote repository
+                    subprocess.check_call(['git', 'fetch', f'https://github.com/{OWNER}/{REPO}.git', f'tags/{new_version}'])
 
-            # Decode bytes to string
-            fetch_output = fetch_output.decode('utf-8')
-
-            # Check if there are any updates
-            if "Already up-to-date." not in fetch_output:
-
-                if messagebox.askquestion('Update Available!', f'{new_version} is available.\nWould you like to install it now?') == 'yes':
-                    try:
-                        # Merge the changes into the local repository
-                        subprocess.check_call(['git', 'merge', f'FETCH_HEAD'])
-                        success = 'Updated successfully!'
-                        
-                        # Restart the script and pass the new version as a command line argument
-                        os.execv(sys.executable, ['python'] + sys.argv + [new_version])
-                    except subprocess.CalledProcessError as e:
-                        success = f'Failed to update : {e}'
+                    # Merge the changes into the local repository
+                    subprocess.check_call(['git', 'merge', f'FETCH_HEAD'])
+                    success = 'Updated successfully!'
                     
-                    print(success)
-            else:
-                # Downgrade to the lower version
-                subprocess.check_call(['git', 'reset', '--hard', f'tags/{new_version}'])
-                print(f'Downgraded to version {new_version}')
+                    # Set the restart flag and restart the script
+                    os.environ[RESTART_FLAG] = '1'
+                    os.execv(sys.executable, ['python'] + sys.argv)
+                except subprocess.CalledProcessError as e:
+                    success = f'Failed to update : {e}'
+                
+                print(success)
 
         else:
             print(f"DEV_MODE was set to {DEV_MODE}, please use 0 or 1!")
