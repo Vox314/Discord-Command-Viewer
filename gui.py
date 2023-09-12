@@ -160,8 +160,8 @@ if __name__ == "__main__":
                     # Fetch the changes from the remote repository
                     subprocess.check_call(['git', 'fetch', f'https://github.com/{OWNER}/{REPO}.git', f'tags/{new_version}'])
 
-                    # Merge the changes into the local repository
-                    subprocess.check_call(['git', 'merge', f'FETCH_HEAD'])
+                    # Reset your local code to match the new_version tag
+                    subprocess.check_call(['git', 'reset', '--hard', f'tags/{new_version}'])
                     success = 'Updated successfully!'
                     
                     # Set the restart flag and restart the script
